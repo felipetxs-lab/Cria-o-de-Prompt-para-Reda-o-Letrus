@@ -1,0 +1,1 @@
+# Cria-o-de-Prompt-para-Reda-o-Letrus
