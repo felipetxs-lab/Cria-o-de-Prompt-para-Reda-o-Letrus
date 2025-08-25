@@ -8,8 +8,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -34,51 +32,6 @@
         .button:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        /* Estilos para os botões flutuantes */
-        .floating-buttons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1000;
-        }
-        .floating-btn {
-            background-color: #1a202c;
-            color: white;
-            padding: 15px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            cursor: pointer;
-        }
-        .floating-btn:hover {
-            transform: scale(1.1);
-        }
-        .tooltip {
-            visibility: hidden;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px 10px;
-            position: absolute;
-            z-index: 1;
-            right: 120%;
-            top: 50%;
-            transform: translateY(-50%);
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .floating-btn:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
         }
     </style>
 </head>
@@ -119,38 +72,33 @@
                 <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 whitespace-pre-wrap text-gray-800 leading-relaxed shadow-inner" id="prompt-text">
                     <!-- O prompt gerado será exibido aqui -->
                 </div>
-                <button
-                    id="copy-button"
-                    class="button w-full bg-blue-600 text-white font-bold py-2 rounded-lg mt-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
-                    Copiar Prompt
-                </button>
+                <div class="flex flex-col space-y-4 mt-6">
+                    <button
+                        id="copy-button"
+                        class="button w-full bg-blue-600 text-white font-bold py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                        Copiar Prompt
+                    </button>
+                    <button
+                        id="chatgpt-btn"
+                        class="button w-full bg-black text-white font-bold py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                    >
+                        Acesse o ChatGPT
+                    </button>
+                    <button
+                        id="gemini-btn"
+                        class="button w-full bg-blue-600 text-white font-bold py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                        Acesse o Gemini
+                    </button>
+                    <button
+                        id="deepseek-btn"
+                        class="button w-full bg-purple-600 text-white font-bold py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                    >
+                        Acesse o DeepSeek
+                    </button>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Botões Flutuantes de Ações -->
-    <div class="floating-buttons">
-        <!-- Botão para ChatGPT -->
-        <div class="relative group">
-            <button id="chatgpt-btn" class="floating-btn bg-[#00A67E] hover:bg-[#008C6D] text-white">
-                <i class="fa-solid fa-bolt"></i>
-            </button>
-            <span class="tooltip group-hover:visible">Copiar e ir para o ChatGPT</span>
-        </div>
-        <!-- Botão para Gemini -->
-        <div class="relative group">
-            <button id="gemini-btn" class="floating-btn bg-[#4285F4] hover:bg-[#3273D1] text-white">
-                <i class="fa-solid fa-gem"></i>
-            </button>
-            <span class="tooltip group-hover:visible">Copiar e ir para o Gemini</span>
-        </div>
-        <!-- Botão para DeepSeek -->
-        <div class="relative group">
-            <button id="deepseek-btn" class="floating-btn bg-[#2C2E3C] hover:bg-[#1E202B] text-white">
-                <i class="fa-solid fa-brain"></i>
-            </button>
-            <span class="tooltip group-hover:visible">Copiar e ir para o DeepSeek</span>
         </div>
     </div>
 
@@ -174,6 +122,7 @@
         function generatePrompt() {
             const theme = themeInput.value.trim();
             if (theme === '') {
+                // Em vez de um alert, podemos mostrar uma mensagem na tela
                 alert('Por favor, insira um tema para a redação.');
                 return;
             }
