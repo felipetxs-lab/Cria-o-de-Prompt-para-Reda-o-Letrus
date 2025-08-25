@@ -1,1 +1,1 @@
-# Cria-o-de-Prompt-para-Reda-o-Letrus
+# Criacao-de-Prompt-para-Redacao-da-Letrus
