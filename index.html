@@ -110,7 +110,7 @@
         const generateButton = document.getElementById('generate-button');
         const copyButton = document.getElementById('copy-button');
         const chatgptBtn = document.getElementById('chatgpt-btn');
-        const copilotBtn = document.getElementById('gemini-btn');
+        const copilotBtn = document.getElementById('copilot-btn');
         const deepseekBtn = document.getElementById('deepseek-btn');
 
         // Endereços das plataformas de IA
@@ -169,7 +169,7 @@ A redação deve ter aproximadamente 30 linhas e utilizar conectivos intra e ext
         generateButton.addEventListener('click', generatePrompt);
         copyButton.addEventListener('click', () => copyAndRedirect(null)); // Copiar sem redirecionar
         chatgptBtn.addEventListener('click', () => copyAndRedirect(chatGPTUrl));
-        geminiBtn.addEventListener('click', () => copyAndRedirect(geminiUrl));
+        copilotBtn.addEventListener('click', () => copyAndRedirect(copilotUrl));
         deepseekBtn.addEventListener('click', () => copyAndRedirect(deepseekUrl));
 
         // Melhora a usabilidade permitindo gerar o prompt com a tecla Enter
