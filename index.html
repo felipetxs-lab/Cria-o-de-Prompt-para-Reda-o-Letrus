@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -32,6 +34,51 @@
         .button:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        /* Estilos para os botões flutuantes */
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .floating-btn {
+            background-color: #1a202c;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+        .tooltip {
+            visibility: hidden;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 10px;
+            position: absolute;
+            z-index: 1;
+            right: 120%;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .floating-btn:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
         }
     </style>
 </head>
@@ -82,13 +129,50 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('generate-button').addEventListener('click', function() {
-            const themeInput = document.getElementById('theme-input');
-            const promptOutput = document.getElementById('prompt-output');
-            const promptText = document.getElementById('prompt-text');
-            const theme = themeInput.value.trim();
+    <!-- Botões Flutuantes de Ações -->
+    <div class="floating-buttons">
+        <!-- Botão para ChatGPT -->
+        <div class="relative group">
+            <button id="chatgpt-btn" class="floating-btn bg-[#00A67E] hover:bg-[#008C6D] text-white">
+                <i class="fa-solid fa-bolt"></i>
+            </button>
+            <span class="tooltip group-hover:visible">Copiar e ir para o ChatGPT</span>
+        </div>
+        <!-- Botão para Gemini -->
+        <div class="relative group">
+            <button id="gemini-btn" class="floating-btn bg-[#4285F4] hover:bg-[#3273D1] text-white">
+                <i class="fa-solid fa-gem"></i>
+            </button>
+            <span class="tooltip group-hover:visible">Copiar e ir para o Gemini</span>
+        </div>
+        <!-- Botão para DeepSeek -->
+        <div class="relative group">
+            <button id="deepseek-btn" class="floating-btn bg-[#2C2E3C] hover:bg-[#1E202B] text-white">
+                <i class="fa-solid fa-brain"></i>
+            </button>
+            <span class="tooltip group-hover:visible">Copiar e ir para o DeepSeek</span>
+        </div>
+    </div>
 
+    <script>
+        // Obtém referências para os elementos HTML
+        const themeInput = document.getElementById('theme-input');
+        const promptOutput = document.getElementById('prompt-output');
+        const promptText = document.getElementById('prompt-text');
+        const generateButton = document.getElementById('generate-button');
+        const copyButton = document.getElementById('copy-button');
+        const chatgptBtn = document.getElementById('chatgpt-btn');
+        const geminiBtn = document.getElementById('gemini-btn');
+        const deepseekBtn = document.getElementById('deepseek-btn');
+
+        // Endereços das plataformas de IA
+        const chatGPTUrl = 'https://chat.openai.com/';
+        const geminiUrl = 'https://gemini.google.com/app';
+        const deepseekUrl = 'https://chat.deepseek.com/';
+        
+        // Função para gerar e exibir o prompt
+        function generatePrompt() {
+            const theme = themeInput.value.trim();
             if (theme === '') {
                 alert('Por favor, insira um tema para a redação.');
                 return;
@@ -108,17 +192,42 @@ A redação deve ter aproximadamente 30 linhas e utilizar conectivos intra e ext
 
             promptText.textContent = generatedPrompt;
             promptOutput.classList.remove('hidden');
-        });
+        }
 
-        document.getElementById('copy-button').addEventListener('click', function() {
-            const promptText = document.getElementById('prompt-text').textContent;
-            const tempInput = document.createElement('textarea');
-            tempInput.value = promptText;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            alert('Prompt copiado para a área de transferência!');
+        // Função para copiar o texto e, opcionalmente, redirecionar
+        async function copyAndRedirect(url) {
+            const textToCopy = promptText.textContent;
+            if (!textToCopy) {
+                alert('Primeiro, gere o prompt para poder copiá-lo.');
+                return;
+            }
+
+            try {
+                // Usa a API do Clipboard para uma cópia mais moderna e confiável
+                await navigator.clipboard.writeText(textToCopy);
+                
+                // Abre a URL em uma nova aba após a cópia
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            } catch (err) {
+                console.error('Erro ao copiar o texto:', err);
+                alert('Erro ao copiar o texto. Por favor, tente novamente ou copie manualmente.');
+            }
+        }
+
+        // Adiciona os event listeners
+        generateButton.addEventListener('click', generatePrompt);
+        copyButton.addEventListener('click', () => copyAndRedirect(null)); // Copiar sem redirecionar
+        chatgptBtn.addEventListener('click', () => copyAndRedirect(chatGPTUrl));
+        geminiBtn.addEventListener('click', () => copyAndRedirect(geminiUrl));
+        deepseekBtn.addEventListener('click', () => copyAndRedirect(deepseekUrl));
+
+        // Melhora a usabilidade permitindo gerar o prompt com a tecla Enter
+        themeInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                generatePrompt();
+            }
         });
     </script>
 </body>
